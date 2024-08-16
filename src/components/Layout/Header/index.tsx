@@ -1,8 +1,14 @@
+import { useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { RootState, AppDispatch } from "@src/store";
-import { useEffect } from "react";
-import { searchMovies, setQuery } from "@src/store/searchSlice";
+import {
+  emptyMoviesData,
+  searchMovies,
+  setQuery,
+} from "@src/store/searchSlice";
+import { debounce } from "@src/utils/helpers";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,11 +19,20 @@ const Header = () => {
     dispatch(setQuery(newQuery));
   };
 
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => {
+      if (searchQuery.length >= 3) {
+        dispatch(searchMovies(searchQuery));
+      } else {
+        dispatch(emptyMoviesData());
+      }
+    }, 300),
+    [dispatch]
+  );
+
   useEffect(() => {
-    if (query) {
-      dispatch(searchMovies(query));
-    }
-  }, [query, dispatch]);
+    debouncedSearch(query);
+  }, [query, debouncedSearch]);
 
   return (
     <div className="bg-gray-100 w-full p-4 flex items-center justify-between">

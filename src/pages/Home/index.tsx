@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const moviesData = useSelector((state: RootState) => state.search.results);
   const status = useSelector((state: RootState) => state.search.status);
   const watchlist = useSelector((state: RootState) => state.watchlist);
-  console.log("🚀 ~ watchlist:", watchlist);
+  const query = useSelector((state: RootState) => state.search.query);
 
   useEffect(() => {
     dispatch(loadWatchlist());
@@ -37,14 +37,21 @@ const Home: React.FC = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Movie Search</h1>
-      <MovieList
-        movies={moviesData ?? []}
-        watchlist={watchlist}
-        onAddToWatchlist={handleAddToWatchlist}
-        onRemoveFromWatchlist={handleRemoveFromWatchlist}
-        onMovieCardClick={handleMovieCardClick}
-        status={status}
-      />
+
+      {query.length < 3 ? (
+        <div className="text-center text-gray-500">
+          <p>Please enter at least 3 characters to search for movies.</p>
+        </div>
+      ) : (
+        <MovieList
+          movies={moviesData ?? []}
+          watchlist={watchlist}
+          onAddToWatchlist={handleAddToWatchlist}
+          onRemoveFromWatchlist={handleRemoveFromWatchlist}
+          onMovieCardClick={handleMovieCardClick}
+          status={status}
+        />
+      )}
     </div>
   );
 };

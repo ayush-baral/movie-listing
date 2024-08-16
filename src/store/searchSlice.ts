@@ -32,6 +32,10 @@ const searchSlice = createSlice({
     setQuery(state, action: PayloadAction<string>) {
       state.query = action.payload;
     },
+
+    emptyMoviesData: (state) => {
+      state.results = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -53,5 +57,5 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setQuery } = searchSlice.actions;
+export const { setQuery, emptyMoviesData } = searchSlice.actions;
 export default searchSlice.reducer;
