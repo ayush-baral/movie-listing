@@ -1,18 +1,18 @@
-import { useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { RootState, AppDispatch } from "@src/store";
+import { useEffect, useCallback } from "react";
 import {
-  emptyMoviesData,
   searchMovies,
   setQuery,
+  emptyMoviesData,
 } from "@src/store/searchSlice";
 import { debounce } from "@src/utils/helpers";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { query } = useSelector((state: RootState) => state.search);
+  const location = useLocation();
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
@@ -50,15 +50,17 @@ const Header = () => {
           Watchlist
         </Link>
       </div>
-      <div className="flex-grow flex justify-center">
-        <input
-          placeholder="Enter Movie Title"
-          type="text"
-          className="outline-none py-2 px-4 rounded-md w-full max-w-md text-sm bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-          value={query}
-          onChange={handleSearchInputChange}
-        />
-      </div>
+      {location.pathname === "/" && (
+        <div className="flex-grow flex justify-center">
+          <input
+            placeholder="Enter Movie Title"
+            type="text"
+            className="outline-none py-2 px-4 rounded-md w-full max-w-md text-sm bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            value={query}
+            onChange={handleSearchInputChange}
+          />
+        </div>
+      )}
     </div>
   );
 };
