@@ -1,32 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Movie } from "@src/types";
 
-interface WatchlistState {
-  watchlist: Movie[];
-}
-
-const initialState: WatchlistState = {
-  watchlist: [],
-};
+const initialState: Movie[] = [];
 
 const watchlistSlice = createSlice({
   name: "watchlist",
   initialState,
   reducers: {
     addMovie(state, action: PayloadAction<Movie>) {
-      state.watchlist.push(action.payload);
-      localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
+      state.push(action.payload);
+      localStorage.setItem("watchlist", JSON.stringify(state));
     },
     removeMovie(state, action: PayloadAction<string>) {
-      state.watchlist = state.watchlist.filter(
+      console.log("removing", action);
+
+      const filteredData = state.filter(
         (movie) => movie.imdbID !== action.payload
       );
-      localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
+      console.log("🚀 ~ removeMovie ~ filteredData:", filteredData);
+      state = state.filter((movie) => movie.imdbID !== action.payload);
+      localStorage.setItem("watchlist", JSON.stringify(state));
     },
     loadWatchlist(state) {
       const savedWatchlist = localStorage.getItem("watchlist");
       if (savedWatchlist) {
-        state.watchlist = JSON.parse(savedWatchlist);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        state = JSON.parse(savedWatchlist);
       }
     },
   },

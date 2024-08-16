@@ -1,22 +1,33 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MovieList from "@src/components/MovieList";
-import { RootState } from "@src/store";
+import { AppDispatch, RootState } from "@src/store";
 import { useNavigate } from "react-router-dom";
+import {
+  addMovie,
+  loadWatchlist,
+  removeMovie,
+} from "@src/store/watchlistSlice";
+import { Movie } from "@src/types";
 
 const Home: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const moviesData = useSelector((state: RootState) => state.search.results);
   const status = useSelector((state: RootState) => state.search.status);
+  const watchlist = useSelector((state: RootState) => state.watchlist);
+  console.log("🚀 ~ watchlist:", watchlist);
 
-  const [watchlist, setWatchlist] = useState<string[]>([]);
+  useEffect(() => {
+    dispatch(loadWatchlist());
+  }, [dispatch]);
 
-  const handleAddToWatchlist = (imdbID: string) => {
-    setWatchlist((prev) => [...prev, imdbID]);
+  const handleAddToWatchlist = (movie: Movie) => {
+    dispatch(addMovie(movie));
   };
 
   const handleRemoveFromWatchlist = (imdbID: string) => {
-    setWatchlist((prev) => prev.filter((id) => id !== imdbID));
+    dispatch(removeMovie(imdbID));
   };
 
   const handleMovieCardClick = (imdbID: string) => {

@@ -20,9 +20,18 @@ const MovieCard: React.FC<MovieCardProps> = ({
   onRemoveFromWatchlist,
   onMovieCardClick,
 }) => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isInWatchlist) {
+      onRemoveFromWatchlist();
+    } else {
+      onAddToWatchlist();
+    }
+  };
+
   return (
     <div
-      className="border border-gray-300 bg-white  rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative cursor-pointer"
+      className="border border-gray-300 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative cursor-pointer"
       onClick={onMovieCardClick}
     >
       <img src={poster} alt={title} className="h-40 w-full object-cover mb-2" />
@@ -32,7 +41,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
       </div>
 
       <button
-        onClick={isInWatchlist ? onRemoveFromWatchlist : onAddToWatchlist}
+        onClick={handleButtonClick}
         className={`absolute top-2 right-2 text-2xl ${
           isInWatchlist ? "text-red-500" : "text-gray-400"
         } hover:text-red-600 transition-colors duration-200`}

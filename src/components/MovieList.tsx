@@ -5,8 +5,8 @@ import { Movie } from "@src/types";
 
 interface MovieListProps {
   movies: Movie[];
-  watchlist: string[];
-  onAddToWatchlist: (imdbID: string) => void;
+  watchlist: Movie[];
+  onAddToWatchlist: (movie: Movie) => void;
   onRemoveFromWatchlist: (imdbID: string) => void;
   onMovieCardClick: (imdbID: string) => void;
   status: "loading" | "failed" | "succeeded" | "idle";
@@ -42,18 +42,24 @@ const MovieList: React.FC<MovieListProps> = ({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.imdbID}
-          poster={movie.Poster}
-          title={movie.Title}
-          released={movie.Year}
-          isInWatchlist={watchlist.includes(movie.imdbID)}
-          onAddToWatchlist={() => onAddToWatchlist(movie.imdbID)}
-          onRemoveFromWatchlist={() => onRemoveFromWatchlist(movie.imdbID)}
-          onMovieCardClick={() => onMovieCardClick(movie.imdbID)}
-        />
-      ))}
+      {movies.map((movie) => {
+        const isInWatchlist = watchlist.some(
+          (item) => item.imdbID === movie.imdbID
+        );
+
+        return (
+          <MovieCard
+            key={movie.imdbID}
+            poster={movie.Poster}
+            title={movie.Title}
+            released={movie.Year}
+            isInWatchlist={isInWatchlist}
+            onAddToWatchlist={() => onAddToWatchlist(movie)}
+            onRemoveFromWatchlist={() => onRemoveFromWatchlist(movie.imdbID)}
+            onMovieCardClick={() => onMovieCardClick(movie.imdbID)}
+          />
+        );
+      })}
     </div>
   );
 };

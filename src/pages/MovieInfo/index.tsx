@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,9 +8,9 @@ import {
 } from "react-icons/ai";
 
 import { MovieDetailSkeleton } from "@src/components/Loading";
-
 import { RootState, AppDispatch } from "@src/store";
 import { fetchMovieDetails } from "@src/store/movieDetailSlice";
+import { addMovie, removeMovie } from "@src/store/watchlistSlice";
 
 const MovieDetailPage = () => {
   const { imdbID } = useParams<{ imdbID: string }>();
@@ -19,7 +19,9 @@ const MovieDetailPage = () => {
   const { movie, loading, error } = useSelector(
     (state: RootState) => state.movieDetail
   );
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const watchlist = useSelector((state: RootState) => state.watchlist);
+
+  const isInWishlist = watchlist.some((item) => item.imdbID === imdbID);
 
   useEffect(() => {
     if (imdbID) {
@@ -28,7 +30,22 @@ const MovieDetailPage = () => {
   }, [imdbID, dispatch]);
 
   const handleAddToWishlist = () => {
-    setIsInWishlist(!isInWishlist);
+    if (!imdbID) return;
+
+    if (isInWishlist) {
+      dispatch(removeMovie(imdbID));
+    } else {
+      if (movie) {
+        const movieData = {
+          imdbID: movie.imdbID,
+          Poster: movie.Poster,
+          Title: movie.Title,
+          Type: movie.Title,
+          Year: movie.Year,
+        };
+        dispatch(addMovie(movieData));
+      }
+    }
   };
 
   if (loading) {
