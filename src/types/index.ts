@@ -3,7 +3,7 @@ interface Rating {
   Value: string;
 }
 
-export interface Movie {
+export interface MovieInfo {
   Title: string;
   Year: string;
   Rated: string;
@@ -29,4 +29,12 @@ export interface Movie {
   Production: string;
   Website: string;
   Response: string;
+}
+
+export interface Movie {
+  Title: string;
+  Year: string;
+  imdbID: string;
+  Type: string;
+  Poster: string;
 }
