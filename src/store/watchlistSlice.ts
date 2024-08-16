@@ -12,20 +12,16 @@ const watchlistSlice = createSlice({
       localStorage.setItem("watchlist", JSON.stringify(state));
     },
     removeMovie(state, action: PayloadAction<string>) {
-      console.log("removing", action);
-
       const filteredData = state.filter(
         (movie) => movie.imdbID !== action.payload
       );
-      console.log("🚀 ~ removeMovie ~ filteredData:", filteredData);
-      state = state.filter((movie) => movie.imdbID !== action.payload);
+      state.splice(0, state.length, ...filteredData);
       localStorage.setItem("watchlist", JSON.stringify(state));
     },
-    loadWatchlist(state) {
+    loadWatchlist() {
       const savedWatchlist = localStorage.getItem("watchlist");
       if (savedWatchlist) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        state = JSON.parse(savedWatchlist);
+        return JSON.parse(savedWatchlist);
       }
     },
   },
