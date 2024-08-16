@@ -8,6 +8,7 @@ import "./index.css";
 import { LayoutWithHeader } from "./components/Layout/LayoutWithHeader";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import MovieDetailPage from "./pages/MovieInfo";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,14 @@ const router = createBrowserRouter([
     element: (
       <LayoutWithHeader>
         <Home />
+      </LayoutWithHeader>
+    ),
+  },
+  {
+    path: "/movie/:imdbID",
+    element: (
+      <LayoutWithHeader>
+        <MovieDetailPage />
       </LayoutWithHeader>
     ),
   },

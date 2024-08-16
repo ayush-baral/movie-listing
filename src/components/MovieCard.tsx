@@ -8,6 +8,7 @@ interface MovieCardProps {
   isInWatchlist: boolean;
   onAddToWatchlist: () => void;
   onRemoveFromWatchlist: () => void;
+  onMovieCardClick: () => void;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
@@ -17,13 +18,17 @@ const MovieCard: React.FC<MovieCardProps> = ({
   isInWatchlist,
   onAddToWatchlist,
   onRemoveFromWatchlist,
+  onMovieCardClick,
 }) => {
   return (
-    <div className='border border-gray-300 bg-white  rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative'>
-      <img src={poster} alt={title} className='h-40 w-full object-cover mb-2' />
-      <div className='p-4'>
-        <h1 className='text-lg font-semibold text-gray-800 mb-1'>{title}</h1>
-        <p className='text-sm text-gray-600'>{released}</p>
+    <div
+      className="border border-gray-300 bg-white  rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative cursor-pointer"
+      onClick={onMovieCardClick}
+    >
+      <img src={poster} alt={title} className="h-40 w-full object-cover mb-2" />
+      <div className="p-4">
+        <h1 className="text-lg font-semibold text-gray-800 mb-1">{title}</h1>
+        <p className="text-sm text-gray-600">{released}</p>
       </div>
 
       <button
