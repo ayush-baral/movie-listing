@@ -15,8 +15,12 @@ const watchlistSlice = createSlice({
       const filteredData = state.filter(
         (movie) => movie.imdbID !== action.payload
       );
-      state.splice(0, state.length, ...filteredData);
-      localStorage.setItem("watchlist", JSON.stringify(state));
+      localStorage.setItem("watchlist", JSON.stringify(filteredData));
+      return filteredData;
+    },
+    clearWatchlist(state) {
+      state.length = 0;
+      localStorage.removeItem("watchlist");
     },
     loadWatchlist() {
       const savedWatchlist = localStorage.getItem("watchlist");
@@ -27,5 +31,6 @@ const watchlistSlice = createSlice({
   },
 });
 
-export const { addMovie, removeMovie, loadWatchlist } = watchlistSlice.actions;
+export const { addMovie, removeMovie, clearWatchlist, loadWatchlist } =
+  watchlistSlice.actions;
 export default watchlistSlice.reducer;

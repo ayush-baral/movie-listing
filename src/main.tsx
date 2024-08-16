@@ -9,6 +9,7 @@ import { LayoutWithHeader } from "./components/Layout/LayoutWithHeader";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import MovieDetailPage from "./pages/MovieInfo";
+import WishlistPage from "./pages/Wishlist";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
     element: (
       <LayoutWithHeader>
         <MovieDetailPage />
+      </LayoutWithHeader>
+    ),
+  },
+  {
+    path: "/wishlist",
+    element: (
+      <LayoutWithHeader>
+        <WishlistPage />
       </LayoutWithHeader>
     ),
   },
