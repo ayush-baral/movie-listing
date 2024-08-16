@@ -1,13 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MovieList from "@src/components/MovieList";
 import { AppDispatch, RootState } from "@src/store";
 import { useNavigate } from "react-router-dom";
-import {
-  addMovie,
-  loadWatchlist,
-  removeMovie,
-} from "@src/store/watchlistSlice";
+import { addMovie, removeMovie } from "@src/store/watchlistSlice";
 import { Movie } from "@src/types";
 
 const Home: React.FC = () => {
@@ -17,10 +13,6 @@ const Home: React.FC = () => {
   const status = useSelector((state: RootState) => state.search.status);
   const watchlist = useSelector((state: RootState) => state.watchlist);
   const query = useSelector((state: RootState) => state.search.query);
-
-  useEffect(() => {
-    dispatch(loadWatchlist());
-  }, [dispatch]);
 
   const handleAddToWatchlist = (movie: Movie) => {
     dispatch(addMovie(movie));
