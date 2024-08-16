@@ -26,17 +26,14 @@ const Home: React.FC = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Movie Search</h1>
-      {status === "loading" && <p>Loading...</p>}
-      {status === "failed" && <p>Failed to load movies.</p>}
-      {status === "succeeded" && (
-        <MovieList
-          movies={moviesData ?? []}
-          watchlist={watchlist}
-          onAddToWatchlist={handleAddToWatchlist}
-          onRemoveFromWatchlist={handleRemoveFromWatchlist}
-          onMovieCardClick={handleMovieCardClick}
-        />
-      )}
+      <MovieList
+        movies={moviesData ?? []}
+        watchlist={watchlist}
+        onAddToWatchlist={handleAddToWatchlist}
+        onRemoveFromWatchlist={handleRemoveFromWatchlist}
+        onMovieCardClick={handleMovieCardClick}
+        status={status}
+      />
     </div>
   );
 };

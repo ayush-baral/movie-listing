@@ -1,15 +1,25 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  AiOutlineHeart,
+  AiFillHeart,
+  AiOutlineArrowLeft,
+} from "react-icons/ai";
+
+import { MovieDetailSkeleton } from "@src/components/Loading";
+
 import { RootState, AppDispatch } from "@src/store";
 import { fetchMovieDetails } from "@src/store/movieDetailSlice";
 
-const MovieDetailPage: React.FC = () => {
+const MovieDetailPage = () => {
   const { imdbID } = useParams<{ imdbID: string }>();
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   const { movie, loading, error } = useSelector(
     (state: RootState) => state.movieDetail
   );
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     if (imdbID) {
@@ -17,73 +27,68 @@ const MovieDetailPage: React.FC = () => {
     }
   }, [imdbID, dispatch]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!movie) return <p>No movie data found</p>;
+  const handleAddToWishlist = () => {
+    setIsInWishlist(!isInWishlist);
+  };
+
+  if (loading) {
+    return <MovieDetailSkeleton />;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
+
+  if (!movie) {
+    return <div className="text-center text-gray-500">No movie data found</div>;
+  }
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">
-        {movie.Title} ({movie.Year})
-      </h1>
-      <div className="flex">
+    <div className="p-4 max-w-4xl mx-auto">
+      <button
+        className="text-blue-500 hover:text-blue-700 mb-4 flex items-center"
+        onClick={() => navigate(-1)}
+      >
+        <AiOutlineArrowLeft size={24} className="mr-2" />
+        Back
+      </button>
+      <div className="relative bg-white rounded-lg shadow-md overflow-hidden">
         <img
           src={movie.Poster}
           alt={movie.Title}
-          className="w-48 h-auto mr-4"
+          className="w-full h-auto object-cover rounded-t-lg"
+          style={{ height: "500px" }} // Adjust the height as needed
         />
-        <div>
-          <p>
-            <strong>Rated:</strong> {movie.Rated}
-          </p>
-          <p>
+        <button
+          className={`absolute top-4 right-4 z-10 ${
+            isInWishlist ? "text-red-700" : "text-red-500"
+          } hover:text-red-700`}
+          onClick={handleAddToWishlist}
+        >
+          {isInWishlist ? (
+            <AiFillHeart size={32} />
+          ) : (
+            <AiOutlineHeart size={32} />
+          )}
+        </button>
+        <div className="p-6">
+          <h1 className="text-3xl font-bold mb-2">
+            {movie.Title} ({movie.Year})
+          </h1>
+          <p className="text-gray-600 mb-4">
             <strong>Released:</strong> {movie.Released}
           </p>
-          <p>
-            <strong>Runtime:</strong> {movie.Runtime}
-          </p>
-          <p>
+          <p className="text-gray-600 mb-4">
             <strong>Genre:</strong> {movie.Genre}
           </p>
-          <p>
+          <p className="text-gray-600 mb-4">
             <strong>Director:</strong> {movie.Director}
           </p>
-          <p>
-            <strong>Writer:</strong> {movie.Writer}
-          </p>
-          <p>
+          <p className="text-gray-600 mb-4">
             <strong>Actors:</strong> {movie.Actors}
           </p>
-          <p>
+          <p className="text-gray-600 mb-4">
             <strong>Plot:</strong> {movie.Plot}
-          </p>
-          <p>
-            <strong>Language:</strong> {movie.Language}
-          </p>
-          <p>
-            <strong>Country:</strong> {movie.Country}
-          </p>
-          <p>
-            <strong>Awards:</strong> {movie.Awards}
-          </p>
-          <p>
-            <strong>Metascore:</strong> {movie.Metascore}
-          </p>
-          <p>
-            <strong>IMDb Rating:</strong> {movie.imdbRating} ({movie.imdbVotes}{" "}
-            votes)
-          </p>
-          <p>
-            <strong>BoxOffice:</strong> {movie.BoxOffice}
-          </p>
-          <p>
-            <strong>Production:</strong> {movie.Production}
-          </p>
-          <p>
-            <strong>Website:</strong>{" "}
-            <a href={movie.Website} target="_blank" rel="noopener noreferrer">
-              {movie.Website}
-            </a>
           </p>
         </div>
       </div>
