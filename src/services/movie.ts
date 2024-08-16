@@ -1,3 +1,4 @@
+import { axios } from "@src/lib/axios";
 import { Movie, MovieInfo } from "@src/types";
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
@@ -9,17 +10,15 @@ interface MovieApiResponse {
 }
 
 export const fetchMovies = async (query: string) => {
-  const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+  const { data } = await axios.get<MovieApiResponse>(
+    `/?apikey=${API_KEY}&s=${query}`
   );
-  const data: MovieApiResponse = await response.json();
-  return data?.Search ?? [];
+  return data.Search ?? [];
 };
 
-export const fetchMovieDetail = async (query: string) => {
-  const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&i=${query}`
+export const fetchMovieDetail = async (imdbID: string) => {
+  const { data } = await axios.get<MovieInfo>(
+    `/?apikey=${API_KEY}&i=${imdbID}`
   );
-  const data: MovieInfo = await response.json();
-  return data ?? [];
+  return data ?? {};
 };
